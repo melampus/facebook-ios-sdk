@@ -359,7 +359,6 @@ static void releaseStatement(sqlite3_stmt* statement, sqlite3* database)
 - (void)_updateEntryInDatabaseForKey:(NSString*)key
     entry:(FBCacheEntityInfo*)entry 
 {
-    NSAssert(dispatch_get_current_queue() == _databaseQueue, @"");    
     initializeStatement(_database, &_updateStatement, updateQuery);
 
     CHECK_SQLITE_SUCCESS(fbdfl_sqlite3_bind_text(
@@ -393,8 +392,6 @@ static void releaseStatement(sqlite3_stmt* statement, sqlite3* database)
 
 - (void)_writeEntryInDatabase:(FBCacheEntityInfo*)entry 
 {
-    NSAssert(dispatch_get_current_queue() == _databaseQueue, @"");
-    
     FBCacheEntityInfo* existing = [self _readEntryFromDatabase:entry.key];
     if (existing) {
         
@@ -441,7 +438,6 @@ static void releaseStatement(sqlite3_stmt* statement, sqlite3* database)
 
 - (FBCacheEntityInfo*)_readEntryFromDatabase:(NSString*)key
 {
-    NSAssert(dispatch_get_current_queue() == _databaseQueue, @"");
     initializeStatement(_database, &_selectByKeyStatement, selectByKeyQuery);
   
     CHECK_SQLITE_SUCCESS(fbdfl_sqlite3_bind_text(
@@ -457,8 +453,6 @@ static void releaseStatement(sqlite3_stmt* statement, sqlite3* database)
 - (NSMutableArray*) _readEntriesFromDatabase:(NSString*)keyFragment
                            excludingFragment:(BOOL)exclude
 {
-    NSAssert(dispatch_get_current_queue() == _databaseQueue, @"");
-    
     sqlite3_stmt* selectStatement;
     const char* query;
     if (exclude) {
@@ -518,8 +512,6 @@ static void releaseStatement(sqlite3_stmt* statement, sqlite3* database)
 
 - (void)_fetchCurrentDiskUsage
 {
-    NSAssert(dispatch_get_current_queue() == _databaseQueue, @"");
-    
     sqlite3_stmt* sizeStatement = nil;
     initializeStatement(_database, &sizeStatement, selectStorageSizeQuery);
     
@@ -530,8 +522,6 @@ static void releaseStatement(sqlite3_stmt* statement, sqlite3* database)
 
 - (FBCacheEntityInfo*)_entryForKey:(NSString*)key
 {
-    NSAssert(dispatch_get_current_queue() != _databaseQueue, @"");
-
     __block FBCacheEntityInfo *entryInfo = [_cachedEntries objectForKey:key];
     if (entryInfo == nil) {
         // TODO: This is really bad if higher layers are going to be
@@ -550,8 +540,6 @@ static void releaseStatement(sqlite3_stmt* statement, sqlite3* database)
                                        
 - (void)_removeEntryFromDatabaseForKey:(NSString*)key
 {
-    NSAssert(dispatch_get_current_queue() == _databaseQueue, @"");
-
     initializeStatement(_database, &_removeByKeyStatement, deleteEntryQuery);
     CHECK_SQLITE_SUCCESS(fbdfl_sqlite3_bind_text(
         _removeByKeyStatement, 
@@ -589,7 +577,6 @@ static void releaseStatement(sqlite3_stmt* statement, sqlite3* database)
 // - drop the temporary 'trimmed' table.
 - (void)_trimDatabase
 {
-    NSAssert(dispatch_get_current_queue() == _databaseQueue, @"");  
     NSAssert(_currentDiskUsage > _diskCapacity, @"");
     if (_currentDiskUsage <= _diskCapacity) {
         return;

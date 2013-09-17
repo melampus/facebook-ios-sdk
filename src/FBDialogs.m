@@ -118,8 +118,7 @@
                       valueToSum:nil
                       parameters:@{ @"render_type" : @"Native" }
                          session:session];
-    [viewController presentModalViewController:composeViewController animated:YES];
-    
+    [viewController presentViewController:composeViewController animated:YES completion:NULL];
     return YES;
 }
 

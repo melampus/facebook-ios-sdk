@@ -142,12 +142,8 @@
     // Assumption: we want to dismiss with the same animated-ness as we present.
     self.dismissAnimated = animated;
     
-    if ([viewController respondsToSelector:@selector(presentViewController:animated:completion:)]) {
-        [viewController presentViewController:self animated:animated completion:nil];
-    } else {
-        [viewController presentModalViewController:self animated:animated];
-    }
-    
+    [viewController presentViewController:self animated:animated completion:nil];
+
     // Set this here because we always revert to NO in viewDidLoad.
     self.autoDismiss = YES;
 }
@@ -210,7 +206,7 @@
             label.font = [UIFont fontWithName:@"Helvetica-Bold" size:20];
             label.backgroundColor = [UIColor clearColor];
             label.textColor = [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0];
-            label.textAlignment = UITextAlignmentCenter;
+            label.textAlignment = NSTextAlignmentCenter;
             label.shadowColor = [UIColor colorWithWhite:0.0 alpha:0.5];
 
             self.titleLabel = [[[UIBarButtonItem alloc] initWithCustomView:label] autorelease];
@@ -290,15 +286,7 @@
 }
 
 - (UIViewController *)compatiblePresentingViewController {
-    if ([self respondsToSelector:@selector(presentingViewController)]) {
-        return [self presentingViewController];
-    } else {
-        UIViewController *parentViewController = [self parentViewController];
-        if (self == [parentViewController modalViewController]) {
-            return parentViewController;
-        }
-    }
-    return nil;
+    return [self presentingViewController];
 }
 
 #pragma mark Handlers
@@ -310,12 +298,8 @@
     
     UIViewController *presentingViewController = [self compatiblePresentingViewController];
     if (self.autoDismiss && presentingViewController) {
-        if ([presentingViewController respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
-            [presentingViewController dismissViewControllerAnimated:self.dismissAnimated completion:nil];
-        } else {
-            [presentingViewController dismissModalViewControllerAnimated:self.dismissAnimated];
-        }
-        
+        [presentingViewController dismissViewControllerAnimated:self.dismissAnimated completion:nil];
+
         [self logAppEvents:YES];
         if (self.handler) {
             self.handler(self, NO);
@@ -330,12 +314,8 @@
     
     UIViewController *presentingViewController = [self compatiblePresentingViewController];
     if (self.autoDismiss && presentingViewController) {
-        if ([presentingViewController respondsToSelector:@selector(dismissViewControllerAnimated:completion:)]) {
-            [presentingViewController dismissViewControllerAnimated:self.dismissAnimated completion:nil];
-        } else {
-            [presentingViewController dismissModalViewControllerAnimated:self.dismissAnimated];
-        }
-        
+        [presentingViewController dismissViewControllerAnimated:self.dismissAnimated completion:nil];
+
         [self logAppEvents:NO];
         if (self.handler) {
             self.handler(self, YES);

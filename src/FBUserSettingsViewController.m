@@ -191,7 +191,7 @@
                                                 containerView.frame.size.width,
                                                 20);
     self.connectedStateLabel.backgroundColor = [UIColor clearColor];
-    self.connectedStateLabel.textAlignment = UITextAlignmentCenter;
+    self.connectedStateLabel.textAlignment = NSTextAlignmentCenter;
     self.connectedStateLabel.numberOfLines = 0;
     self.connectedStateLabel.font = [UIFont boldSystemFontOfSize:16.0];
     self.connectedStateLabel.shadowColor = [UIColor blackColor];
@@ -259,14 +259,13 @@
     [self updateBackgroundImage];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) || UIInterfaceOrientationIsPortrait(interfaceOrientation);
-}
-
-- (BOOL)shouldAutorotate {
-    UIInterfaceOrientation orientation = [[UIDevice currentDevice] orientation];
-    
-    return [self shouldAutorotateToInterfaceOrientation:orientation];
+- (NSUInteger)supportedInterfaceOrientations
+{
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        return UIInterfaceOrientationMaskAll;
+    } else {
+        return UIInterfaceOrientationMaskPortrait;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
