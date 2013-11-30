@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.description  =  'The Facebook SDK for iOS enables you to access the Facebook Platform APIs including the Graph API, FQL, and Dialogs.'
   s.homepage     =  'https://developers.facebook.com/docs/ios/'
   s.author       =  'Facebook'
-  s.source       =  { :git => 'https://github.com/melampus/facebook-ios-sdk.git', :tag => 'sdk-version-3.10.0' }
+  s.source       =  { :git => 'https://github.com/melampus/facebook-ios-sdk.git', :tag => 'sdk-version-3.10.0-melampus' }
   s.source_files =  'src/*.{h,m}', 'src/Base64/*.{h,m}', 'src/Cryptography/*.{h,m}'
   s.resources    =  'src/FacebookSDKResources.bundle', 'src/FBUserSettingsViewResources.bundle'
   s.header_dir   =  'FacebookSDK'
